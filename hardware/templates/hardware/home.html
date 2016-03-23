@@ -1,0 +1,51 @@
+{% extends "hardware/base.html" %}
+
+{% block title %}主页{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid" id="lab-content">
+        <div id="homeCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#homeCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#homeCarousel" data-slide-to="1"></li>
+                <li data-target="#homeCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img class="first-slide" src="/static/media/DC1.jpg" alt="First slide">
+                    <div class="carousel-caption">
+                        <h1>欢迎</h1>
+                        <p style="color:black">欢迎访问中国移动通信研究院实验室管理系统</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" role="button">注册系统</a></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <img class="second-slide" src="/static/media/DC2.jpg" alt="Second slide">
+                    <div class="carousel-caption">
+                        <h1>你好</h1>
+                        <p style="color:black">这是一个神奇的系统，你可以通过它线上完成实验室的管理</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" role="button">了解更多</a></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <img class="third-slide" src="/static/media/DC3.jpg" alt="Third slide">
+                    <div class="carousel-caption">
+                        <h1>世界</h1>
+                        <p style="color:black">你可以向管理员建议，增加更多你喜欢的功能</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" role="button">联系管理员</a></p>
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

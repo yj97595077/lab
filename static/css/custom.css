@@ -1,0 +1,8 @@
+/* base.html */
+/* 所有的正文main部分从导航栏下面55px开始 */
+#lab-content {
+  padding-top: 55px;
+}
+
+/* server.html */
+/* xxx */
