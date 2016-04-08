@@ -19,6 +19,7 @@ from hardware.views import *
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^home/', home),
+    url(r'^accounts/signup/', signup),
     url(r'^accounts/login/', login),
     url(r'^accounts/logout/', logout),
     url(r'^server/', server),
