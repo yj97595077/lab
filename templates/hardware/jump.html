@@ -1,0 +1,56 @@
+{% extends "hardware/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block title %}跳转页{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4">
+            {% if signup_success %}
+                <div class="center">
+                    <h3>你已经成功注册，并已成功登录！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/accounts/logout/"><input type="button" value="注销" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if logout_success %}
+                <div class="center">
+                    <h3>你已经成功登出！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/accounts/login/"><input type="button" value="登录" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if server_add_success %}
+                <div class="center">
+                    <h3>服务器已添加成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
+                    <a href="/server/add/"><input type="button" value="继续添加服务器" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if server_edit_success %}
+                <div class="center">
+                    <h3>服务器已编辑成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if server_delete_success %}
+                <div class="center">
+                    <h3>服务器已删除成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

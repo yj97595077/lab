@@ -1,13 +1,18 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
 
 # Register your models here.
-from hardware.models import Rack, Server
+from hardware.models import *
 
-class RackAdmin(admin.ModelAdmin):
-    list_display=('name','manager')
-
+#注册模块，两种方法，第一种的控制更精准
+'''
 class ServerAdmin(admin.ModelAdmin):
-    list_display=('number','manager','company','product','rack','conf')
+    list_display=('number','manager','company','product',...)
 
-admin.site.register(Rack, RackAdmin)
 admin.site.register(Server, ServerAdmin)
+'''
+admin.site.register(Manager)
+admin.site.register(Company)
+admin.site.register(Rack)
+admin.site.register(Server)

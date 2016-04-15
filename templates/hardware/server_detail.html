@@ -1,0 +1,110 @@
+{% extends "hardware/base.html" %}
+
+{% block title %}实验室服务器详情{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+        <div class="row">
+            <div class="col-sm-8 col-md-8">
+                <div class="center">
+                    <h3>实验室服务器详情</h3>
+                </div>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th class="center">资产编号</th>
+                            <td class="center">{{server.number}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">负责人</th>
+                            <td class="center">
+                                {% for manager in server.manager.all %}
+                                    {{manager}}
+                                    {% if not forloop.last %}
+                                        ,
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="center">生产厂商</th>
+                            <td class="center">{{server.company}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">生产型号</th>
+                            <td class="center">{{server.product}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">进场时间</th>
+                            <td class="center">{{server.time}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">机架位置</th>
+                            <td class="center">{{server.rack}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">机器配置</th>
+                            <td class="center">{{server.conf}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">状态</th>
+                            <td class="center">{{server.state}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">操作系统</th>
+                            <td class="center">{{server.system}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">系统版本</th>
+                            <td class="center">{{server.version}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">业务</th>
+                            <td class="center">{{server.service}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">主机名</th>
+                            <td class="center">{{server.hostname}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">IPMI的IP</th>
+                            <td class="center">{{server.ipmi_ip}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">IPMI的用户名</th>
+                            <td class="center">{{server.ipmi_user}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">IPMI的密码</th>
+                            <td class="center">{{server.ipmi_passwd}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">系统的IP</th>
+                            <td class="center">{{server.sys_ip}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">系统的用户名</th>
+                            <td class="center">{{server.sys_user}}</td>
+                        </tr>
+                        <tr>
+                            <th class="center">系统的密码</th>
+                            <td class="center">{{server.sys_passwd}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="center">
+                    <a href="/server/edit/{{ server.id }}"><input type="button" value="编辑服务器" class="btn btn-info"></a>
+                    <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4">
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
