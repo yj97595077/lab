@@ -49,7 +49,7 @@ class Server(models.Model):
     company = models.ForeignKey(Company, verbose_name = '生产厂商')
     product = models.CharField('生产型号', max_length = 256)
     time = models.DateTimeField('进场时间', auto_now_add = True)
-    rack = models.ForeignKey(Rack, verbose_name = '机架位置')
+    rack = models.ForeignKey(Rack, verbose_name = '机柜')
     conf = models.TextField('机器配置', max_length = 256)
     state = models.CharField('状态', max_length = 256, choices = (('enable', '可用'),('disable', '不可用'),))
     system = models.CharField('操作系统', max_length = 256, choices = SYSTEM_CHOICES)

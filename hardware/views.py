@@ -163,5 +163,6 @@ def server_delete(request, id):
 
 @login_required
 def server_detail(request, id):
-    server = Server.objects.get(id=id)
-    return render_to_response('hardware/server_detail.html', RequestContext(request, {'server': server}))
+    servers = Server.objects.filter(id=id)
+    #servers = Server.objects.filter(state="enable") #测试竖向表格展示
+    return render_to_response('hardware/server_detail.html', RequestContext(request, {'servers': servers}))

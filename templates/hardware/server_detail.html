@@ -15,10 +15,13 @@
                     <tbody>
                         <tr>
                             <th class="center">资产编号</th>
+                            {% for server in servers %}
                             <td class="center">{{server.number}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">负责人</th>
+                            {% for server in servers %}
                             <td class="center">
                                 {% for manager in server.manager.all %}
                                     {{manager}}
@@ -27,76 +30,117 @@
                                     {% endif %}
                                 {% endfor %}
                             </td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">生产厂商</th>
+                            {% for server in servers %}
                             <td class="center">{{server.company}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">生产型号</th>
+                            {% for server in servers %}
                             <td class="center">{{server.product}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">进场时间</th>
+                            {% for server in servers %}
                             <td class="center">{{server.time}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
-                            <th class="center">机架位置</th>
+                            <th class="center">机柜</th>
+                            {% for server in servers %}
                             <td class="center">{{server.rack}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">机器配置</th>
+                            {% for server in servers %}
                             <td class="center">{{server.conf}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">状态</th>
+                            {% for server in servers %}
                             <td class="center">{{server.state}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">操作系统</th>
+                            {% for server in servers %}
                             <td class="center">{{server.system}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">系统版本</th>
+                            {% for server in servers %}
                             <td class="center">{{server.version}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">业务</th>
+                            {% for server in servers %}
                             <td class="center">{{server.service}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">主机名</th>
+                            {% for server in servers %}
                             <td class="center">{{server.hostname}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">IPMI的IP</th>
+                            {% for server in servers %}
                             <td class="center">{{server.ipmi_ip}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">IPMI的用户名</th>
+                            {% for server in servers %}
                             <td class="center">{{server.ipmi_user}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">IPMI的密码</th>
+                            {% for server in servers %}
                             <td class="center">{{server.ipmi_passwd}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">系统的IP</th>
+                            {% for server in servers %}
                             <td class="center">{{server.sys_ip}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">系统的用户名</th>
+                            {% for server in servers %}
                             <td class="center">{{server.sys_user}}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th class="center">系统的密码</th>
+                            {% for server in servers %}
                             <td class="center">{{server.sys_passwd}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">操作</th>
+                            {% for server in servers %}
+                            <td class="center"><a href="/server/edit/{{server.id}}/">编辑</a></td>
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="center">
+                    {% for server in servers %}
                     <a href="/server/edit/{{ server.id }}"><input type="button" value="编辑服务器" class="btn btn-info"></a>
+                    {% endfor %}
                     <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
                 </div>
             </div>
