@@ -105,3 +105,41 @@ class ServerForm(ModelForm):
             'sys_passwd',
         )
 
+class IPForm(ModelForm):
+    ip_start = forms.CharField(
+        label=u"起始IP",
+        required=True,
+        error_messages={'required': u'请输入起始IP'},
+        widget=forms.TextInput(
+            attrs={
+                'placeholder':u"起始IP",
+            }
+        ),
+    )
+    ip_end = forms.CharField(
+        label=u"终止IP",
+        required=True,
+        error_messages={'required': u'请输入终止IP'},
+        widget=forms.TextInput(
+            attrs={
+                'placeholder':u"终止IP",
+            }
+        ),
+    )
+    class Meta:
+        model = IP
+        fields = (
+            #'ip',
+            'ip_start',
+            'ip_end',
+            'network',
+            'manager',
+            'project',
+            'rack',
+            'service',
+            'state',
+            'time_start',
+            'time_end',
+            'notes',
+        )
+

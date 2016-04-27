@@ -166,3 +166,97 @@ def server_detail(request, id):
     servers = Server.objects.filter(id=id)
     #servers = Server.objects.filter(state="enable") #测试竖向表格展示
     return render_to_response('hardware/server_detail.html', RequestContext(request, {'servers': servers}))
+
+@login_required
+def server_ssh(request, id):
+    url = "192.168.112.110"
+    return render_to_response('hardware/server_ssh.html', RequestContext(request, {'url': '10.2.41.182:443'}))
+
+@login_required
+#由于传递的变量数目可能少于所有列出的，所以必须得用可变参数传递。
+def ip(request, **arg):
+    managers = Manager.objects.all()
+    racks = Rack.objects.all()
+    state_list = ['enable', 'disable']
+    if arg != {}:
+        for x in arg:
+            if x == "search":
+                search = arg[x]
+            if x == "id":
+                id = arg[x]
+            if x == "item":
+                item = arg[x]
+        if search == "manager":
+            manager = Manager.objects.get(id = id)
+            ips = IP.objects.filter(manager = manager)
+        if search == "rack":
+            rack = Rack.objects.get(id = id)
+            ips = IP.objects.filter(rack = rack)
+        if search == "state":
+            state = item
+            ips = IP.objects.filter(state = state)
+    else:
+        ips = IP.objects.all()
+    paginator = Paginator(ips, 10) # 实例化一个分页对象
+    page = request.GET.get('page') # 获取页码
+    try:
+        ips = paginator.page(page) # 获取某页对应的记录
+    except PageNotAnInteger: # 如果页码不是个整数
+        ips = paginator.page(1) # 取第一页的记录
+    except (InvalidPage, EmptyPage): # 如果页码太大，没有相应的记录
+        ips = paginator.page(paginator.num_pages) # 取最后一页的记录
+    content = {
+        'managers': managers,
+        'racks': racks,
+        'state_list': state_list,
+        'ips': ips,
+    }
+    return render_to_response('hardware/ip.html', RequestContext(request, content))
+
+@login_required
+def ip_add(request):
+    ip_segment_error = False
+    ip_exist_error = False
+    if request.method == 'GET':
+        ipform = IPForm()
+    else:
+        ipform = IPForm(request.POST)
+        if ipform.is_valid():
+            # 从起止IP中得到一个IP列表
+            ip_start = ipform.cleaned_data['ip_start']
+            ip_end = ipform.cleaned_data['ip_end']
+            ip_start_split = ip_start.split('.')
+            ip_end_split = ip_end.split('.')
+            if ip_start_split[0] == ip_end_split[0] and ip_start_split[1] == ip_end_split[1] and ip_start_split[2] == ip_end_split[2]:
+                ip_segment_range = range(int(ip_start_split[3]), (int(ip_end_split[3]) + 1))
+                for ip_segment in ip_segment_range:
+                    ip = str(ip_start_split[0]) + '.' + str(ip_start_split[1]) + '.' + str(ip_start_split[2]) + '.' + str(ip_segment)
+                    if IP.objects.filter(ip = ip).exists():
+                        ip_exist_error = True
+                        break
+                if ip_exist_error == False:
+                    ip = str(ip_start_split[0]) + '.' + str(ip_start_split[1]) + '.' + str(ip_start_split[2]) + '.' + str(ip_segment_range[0])
+                    new_ip = ipform.save(commit = False)
+                    new_ip.ip = ip
+                    new_ip.save()
+                    new_ip_id = new_ip.id
+                    ipform.save_m2m()
+                    if len(ip_segment_range) >= 2:
+                        for ip_segment in ip_segment_range[1:]:
+                            ip = str(ip_start_split[0]) + '.' + str(ip_start_split[1]) + '.' + str(ip_start_split[2]) + '.' + str(ip_segment)
+                            new_ip = ipform.save(commit = False)
+                            new_ip.ip = ip
+                            new_ip.id = new_ip_id + 1
+                            new_ip.save(force_insert = True)
+                            new_ip_id = new_ip.id
+                            ipform.save_m2m()
+                    return render_to_response('hardware/jump.html', RequestContext(request, {'ip_add_success': True}))
+            else:
+                ip_segment_error = True
+    content = {
+        'ip_segment_error': ip_segment_error,
+        'ip_exist_error': ip_exist_error,
+        'ipform': ipform,
+    }
+    return render_to_response('hardware/ip_add.html', RequestContext(request, content))
+

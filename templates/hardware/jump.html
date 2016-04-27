@@ -49,6 +49,15 @@
                     <a href="/server/"><input type="button" value="返回服务器列表" class="btn btn-info"></a>
                 </div>
             {% endif %}
+
+            {% if ip_add_success %}
+                <div class="center">
+                    <h3>IP记录已添加成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/ip/"><input type="button" value="返回IP资源列表" class="btn btn-info"></a>
+                    <a href="/ip/add/"><input type="button" value="继续添加IP记录" class="btn btn-info"></a>
+                </div>
+            {% endif %}
         </div>
     </div>
     </div>

@@ -34,6 +34,18 @@ class Rack(models.Model):
     def __unicode__(self):
         return self.name
 
+class Network(models.Model):
+    name = models.CharField('网段', max_length = 256)
+    manager = models.ManyToManyField(Manager, verbose_name = '负责人')
+    vlan = models.CharField('VLAN', max_length = 256)
+    netmask = models.CharField('掩码', max_length = 256)
+    gateway = models.CharField('网关', max_length = 256)
+    dns = models.CharField('DNS', max_length = 256)
+    description = models.TextField('网段描述', max_length = 256)
+
+    def __unicode__(self):
+        return self.name
+
 class Server(models.Model):
     SYSTEM_CHOICES = (
         ('Windows', 'Windows'),
@@ -65,4 +77,18 @@ class Server(models.Model):
 
     def __unicode__(self):
         return self.number
+
+class IP(models.Model):
+    ip = models.CharField('IP', max_length = 256)
+    network = models.ForeignKey(Network, verbose_name = '网段')
+    manager = models.ManyToManyField(Manager, verbose_name = '负责人')
+    project = models.CharField('项目', max_length = 256)
+    rack = models.ForeignKey(Rack, verbose_name = '机柜')
+    service = models.CharField('业务', max_length = 256, blank = True)
+    state = models.CharField('状态', max_length = 256, choices = (('enable', '可用'),('disable', '不可用'),))
+    time_start = models.DateField('开始时间', max_length = 256)
+    time_end = models.DateField('结束时间', max_length = 256)
+    notes = models.TextField('备注', max_length = 256, blank = True)
+    def __unicode__(self):
+        return self.ip
 

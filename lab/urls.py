@@ -30,4 +30,9 @@ urlpatterns = [
     url(r'^server/edit/(?P<id>[\d]+)/$',server_edit),
     url(r'^server/delete/(?P<id>[\d]+)/$', server_delete),
     url(r'^server/detail/(?P<id>[\d]+)/$', server_detail),
+    url(r'^server/ssh/(?P<id>[\d]+)/$', server_ssh),
+    url(r'^ip/$', ip),
+    url(r'^ip/search/(?P<search>\w+)/(?P<id>[\d]+)/$', ip),
+    url(r'^ip/search/(?P<search>\w+)/(?P<item>\w+)/$', ip),
+    url(r'^ip/add/', ip_add),
 ]

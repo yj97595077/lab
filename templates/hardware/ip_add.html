@@ -1,0 +1,51 @@
+{% extends "hardware/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block title %}增加新IP记录{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+            <div class="center">
+                <h3>增加新IP记录</h3>
+            </div>
+
+            {% if ip_segment_error %}
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <h4>错误!</h4>
+                    <h4>填写的IP段需要在同一网络内!</h4>
+                </div>
+            {% endif %}
+
+            {% if ip_exist_error %}
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <h4>错误!</h4>
+                    <h4>填写的IP段内的IP已经存在!请删除已存在的IP后再行添加！</h4>
+                </div>
+            {% endif %}
+
+            <form action="" method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form ipform %}
+                {% buttons %}
+                    <div class="center">
+                        <button type="submit" class="btn btn-primary">
+                            {% bootstrap_icon "star" %} Submit
+                        </button>
+                    </div>
+                {% endbuttons %}
+            </form>
+
+            <div class="center">
+                <a href="/ip/"><input type="button" value="返回IP资源列表" class="btn btn-info"></a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
