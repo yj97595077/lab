@@ -105,6 +105,23 @@ class ServerForm(ModelForm):
             'sys_passwd',
         )
 
+class SwitchForm(ModelForm):
+    class Meta:
+        model = Switch
+        fields = (
+            'number',
+            'manager',
+            'company',
+            'product',
+            'rack',
+            'state',
+            'service',
+            'hostname',
+            'sys_ip',
+            'sys_user',
+            'sys_passwd',
+        )
+
 class IPForm(ModelForm):
     ip_start = forms.CharField(
         label=u"起始IP",
@@ -137,9 +154,12 @@ class IPForm(ModelForm):
             'project',
             'rack',
             'service',
-            'state',
             'time_start',
             'time_end',
             'notes',
         )
+        widgets={
+            'time_start': forms.TextInput(attrs={'placeholder': u'时间格式：xxxx-xx-xx，例如2016-01-01'}),
+            'time_end': forms.TextInput(attrs={'placeholder': u'时间格式：xxxx-xx-xx，例如2016-01-01'}),
+        }
 

@@ -44,7 +44,7 @@
                     {% if request.user.is_authenticated %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                硬件资源
+                                资产管理
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -113,6 +113,8 @@
     <script src="/static/js/jquery.min.js" type="text/javascript"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed version:3.3.5 -->
     <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- Include baidu echarts JavaScript -->
+    <script src="/static/js/echarts.js" type="text/javascript"></script>
 
     {% block js %}{% endblock %}
 

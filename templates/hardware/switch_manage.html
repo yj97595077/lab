@@ -1,0 +1,66 @@
+{% extends "hardware/base.html" %}
+
+{% block title %}实验室交换机管理{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+        <div class="row">
+            <div class="col-sm-8 col-md-8">
+                <div class="center">
+                    <h3>实验室交换机管理</h3>
+                </div>
+                <div id="cpu" style="height:400px; width: 90%;"></div>
+            </div>
+
+            <div class="col-sm-4 col-md-4">
+                {{ cpu }}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script type="text/javascript">
+        var dom = document.getElementById("cpu");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+
+        option = {
+            tooltip : {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '业务指标',
+                    type: 'gauge',
+                    detail: {formatter:'{value}%'},
+                    data: [{value: 50, name: 'CPU利用率'}]
+                }
+            ]
+        };
+
+        app.timeTicket = setInterval(function () {
+            $.ajax({
+                url: "http://10.2.41.182:8000/switch/manage/2/",
+                type: "POST",
+                success: function(cpu){
+                
+                }
+                })
+            option.series[0].data[0].value = {{ cpu }};
+            myChart.setOption(option, true);
+        },2000);
+    </script>
+
+{% endblock %}

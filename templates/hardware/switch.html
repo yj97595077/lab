@@ -1,0 +1,127 @@
+{% extends "hardware/base.html" %}
+
+{% block title %}实验室交换机列表{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+        <div class="row">
+            <div class="col-sm-2 col-md-2">
+                <h3>按需检索</h3>
+                <ul class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        负责人
+                        <strong class="caret"></strong>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for manager in managers %}
+                            <li><a href="/switch/search/manager/{{manager.id}}/">{{manager.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+
+                <ul class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        厂商
+                        <strong class="caret"></strong>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for company in companys %}
+                            <li><a href="/switch/search/company/{{company.id}}/">{{company.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+
+                <ul class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        机柜
+                        <strong class="caret"></strong>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for rack in racks %}
+                            <li><a href="/switch/search/rack/{{rack.id}}/">{{rack.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+
+                <ul class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        可用性
+                        <strong class="caret"></strong>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for state in state_list %}
+                            <li><a href="/switch/search/state/{{state}}/">{{state}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="col-sm-10 col-md-10">
+                <h3>实验室交换机列表</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="center">资产编号</th>
+                            <th class="center">负责人</th>
+                            <th class="center">生产厂商</th>
+                            <th class="center">生产型号</th>
+                            <th class="center">机柜</th>
+                            <th class="center">是否可用</th>
+                            <th class="center">业务</th>
+                            <th class="center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for switch in switches.object_list %}
+                            <tr>
+                                <td class="center">{{switch.number}}</td>
+                                <td class="center">
+                                    {% for manager in switch.manager.all %}
+                                        {{manager}}
+                                        {% if not forloop.last %}
+                                            ,
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="center">{{switch.company}}</td>
+                                <td class="center">{{switch.product}}</td>
+                                <td class="center">{{switch.rack}}</td>
+                                <td class="center">{{switch.state}}</td>
+                                <td class="center">{{switch.service}}</td>
+                                <td class="center">
+                                    <a href="/switch/detail/{{switch.id}}/">详情</a>
+                                    <a href="/switch/edit/{{switch.id}}/">编辑</a>
+                                    <a href="/switch/delete/{{switch.id}}/">删除</a>
+                                    <a href="/switch/telnet/{{switch.id}}/">Telnet</a>
+                                    <a href="/switch/manage/{{switch.id}}/">管理</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="right">
+                    {% if switch.has_previous %}
+                        <a href="?page={{ switches.previous_page_number }}">上一页</a>
+                    {% endif %}
+                    {% for page_number in switches.paginator.page_range %}
+                        {% ifequal page_number  switches.number %}
+                            {{ page_number }}
+                        {% else %}
+                            <a href="?page={{ page_number }}">{{ page_number }}</a>
+                        {% endifequal %}
+                    {% endfor %}
+                    {% if switches.has_next %}
+                        <a href="?page={{ switches.next_page_number }}">下一页</a>
+                    {% endif %}
+                </div>
+
+                <div class="center">
+                    <a href="/switch/add/"><input type="button" value="增加新交换机" class="btn btn-info"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

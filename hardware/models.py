@@ -78,6 +78,23 @@ class Server(models.Model):
     def __unicode__(self):
         return self.number
 
+class Switch(models.Model):
+    number = models.CharField('资产编号', max_length = 256)
+    manager = models.ManyToManyField(Manager, verbose_name = '负责人')
+    company = models.ForeignKey(Company, verbose_name = '生产厂商')
+    product = models.CharField('生产型号', max_length = 256)
+    time = models.DateTimeField('进场时间', auto_now_add = True)
+    rack = models.ForeignKey(Rack, verbose_name = '机柜')
+    state = models.CharField('状态', max_length = 256, choices = (('enable', '可用'),('disable', '不可用'),))
+    service = models.CharField('业务', max_length = 256, blank = True)
+    hostname = models.CharField('主机名', max_length = 256, blank = True)
+    sys_ip = models.CharField('系统的IP', max_length = 256, blank = True)
+    sys_user = models.CharField('系统的用户名', max_length = 256, blank = True)
+    sys_passwd = models.CharField('系统的密码', max_length = 256, blank = True)
+
+    def __unicode__(self):
+        return self.number
+
 class IP(models.Model):
     ip = models.CharField('IP', max_length = 256)
     network = models.ForeignKey(Network, verbose_name = '网段')
@@ -85,7 +102,6 @@ class IP(models.Model):
     project = models.CharField('项目', max_length = 256)
     rack = models.ForeignKey(Rack, verbose_name = '机柜')
     service = models.CharField('业务', max_length = 256, blank = True)
-    state = models.CharField('状态', max_length = 256, choices = (('enable', '可用'),('disable', '不可用'),))
     time_start = models.DateField('开始时间', max_length = 256)
     time_end = models.DateField('结束时间', max_length = 256)
     notes = models.TextField('备注', max_length = 256, blank = True)

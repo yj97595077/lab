@@ -50,12 +50,45 @@
                 </div>
             {% endif %}
 
+            {% if switch_add_success %}
+                <div class="center">
+                    <h3>交换机已添加成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/switch/"><input type="button" value="返回交换机列表" class="btn btn-info"></a>
+                    <a href="/switch/add/"><input type="button" value="继续添加交换机" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if switch_edit_success %}
+                <div class="center">
+                    <h3>交换机已编辑成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/switch/"><input type="button" value="返回交换机列表" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if switch_delete_success %}
+                <div class="center">
+                    <h3>交换机已删除成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/switch/"><input type="button" value="返回交换机列表" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
             {% if ip_add_success %}
                 <div class="center">
                     <h3>IP记录已添加成功！</h3>
                     <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
                     <a href="/ip/"><input type="button" value="返回IP资源列表" class="btn btn-info"></a>
                     <a href="/ip/add/"><input type="button" value="继续添加IP记录" class="btn btn-info"></a>
+                </div>
+            {% endif %}
+
+            {% if ip_delete_success %}
+                <div class="center">
+                    <h3>IP记录已删除成功！</h3>
+                    <a href="/home/"><input type="button" value="返回主页" class="btn btn-info"></a>
+                    <a href="/ip/"><input type="button" value="返回IP资源列表" class="btn btn-info"></a>
                 </div>
             {% endif %}
         </div>

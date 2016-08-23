@@ -1,0 +1,118 @@
+{% extends "hardware/base.html" %}
+
+{% block title %}实验室交换机详情{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="lab-content">
+        <div class="row">
+            <div class="col-sm-8 col-md-8">
+                <div class="center">
+                    <h3>实验室交换机详情</h3>
+                </div>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th class="center">资产编号</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.number}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">负责人</th>
+                            {% for switch in switches %}
+                            <td class="center">
+                                {% for manager in switch.manager.all %}
+                                    {{manager}}
+                                    {% if not forloop.last %}
+                                        ,
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">生产厂商</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.company}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">生产型号</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.product}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">进场时间</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.time}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">机柜</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.rack}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">状态</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.state}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">业务</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.service}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">主机名</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.hostname}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">系统的IP</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.sys_ip}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">系统的用户名</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.sys_user}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">系统的密码</th>
+                            {% for switch in switches %}
+                            <td class="center">{{switch.sys_passwd}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th class="center">操作</th>
+                            {% for switch in switches %}
+                            <td class="center"><a href="/switch/edit/{{switch.id}}/">编辑</a></td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="center">
+                    {% for switch in switches %}
+                    <a href="/switch/edit/{{ switch.id }}"><input type="button" value="编辑交换机" class="btn btn-info"></a>
+                    {% endfor %}
+                    <a href="/switch/"><input type="button" value="返回交换机列表" class="btn btn-info"></a>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4">
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

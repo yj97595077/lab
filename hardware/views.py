@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from easysnmp import Session
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
@@ -87,7 +87,9 @@ def server(request, **arg):
     racks = Rack.objects.all()
     state_list = ['enable', 'disable']
     system_list = ['Windows', 'Redhat', 'CentOS', 'Debian', 'Ubuntu', 'Others', 'NotDeployed']
-    if arg != {}:
+    if arg == {}:
+        servers = Server.objects.all()
+    else:
         for x in arg:
             if x == "search":
                 search = arg[x]
@@ -110,8 +112,7 @@ def server(request, **arg):
         if search == "system":
             system = item
             servers = Server.objects.filter(system = system)
-    else:
-        servers = Server.objects.all()
+    servers = servers.extra(select={'number_int': 'number+0'}).extra(order_by=['number_int'])
     paginator = Paginator(servers, 5) # 实例化一个分页对象
     page = request.GET.get('page') # 获取页码
     try:
@@ -174,11 +175,14 @@ def server_ssh(request, id):
 
 @login_required
 #由于传递的变量数目可能少于所有列出的，所以必须得用可变参数传递。
-def ip(request, **arg):
+def switch(request, **arg):
     managers = Manager.objects.all()
+    companys = Company.objects.all()
     racks = Rack.objects.all()
     state_list = ['enable', 'disable']
-    if arg != {}:
+    if arg == {}:
+        switches = Switch.objects.all()
+    else:
         for x in arg:
             if x == "search":
                 search = arg[x]
@@ -188,15 +192,112 @@ def ip(request, **arg):
                 item = arg[x]
         if search == "manager":
             manager = Manager.objects.get(id = id)
+            switches = Switch.objects.filter(manager = manager)
+        if search == "company":
+            company = Company.objects.get(id = id)
+            switches = Switch.objects.filter(company = company)
+        if search == "rack":
+            rack = Rack.objects.get(id = id)
+            switches = Switch.objects.filter(rack = rack)
+        if search == "state":
+            state = item
+            switches = Switch.objects.filter(state = state)
+    switches = switches.extra(select={'number_int': 'number+0'}).extra(order_by=['number_int'])
+    paginator = Paginator(switches, 5) # 实例化一个分页对象
+    page = request.GET.get('page') # 获取页码
+    try:
+        switches = paginator.page(page) # 获取某页对应的记录
+    except PageNotAnInteger: # 如果页码不是个整数
+        switches = paginator.page(1) # 取第一页的记录
+    except (InvalidPage, EmptyPage): # 如果页码太大，没有相应的记录
+        switches = paginator.page(paginator.num_pages) # 取最后一页的记录
+    content = {
+        'managers': managers,
+        'companys': companys,
+        'racks': racks,
+        'state_list': state_list,
+        'switches': switches,
+    }
+    return render_to_response('hardware/switch.html', RequestContext(request, content))
+
+@login_required
+def switch_add(request):
+    if request.method == 'GET':
+        switchform = SwitchForm()
+    else:
+        switchform = SwitchForm(request.POST)
+        if switchform.is_valid():
+            switch = switchform.save()
+            switch.save()
+            return render_to_response('hardware/jump.html', RequestContext(request, {'switch_add_success': True}))
+    return render_to_response('hardware/switch_add.html', RequestContext(request, {'switchform': switchform}))
+
+@login_required
+def switch_edit(request, id):
+    if request.method == 'GET':
+        switch = Switch.objects.get(id=id)
+        switchform = SwitchForm(instance = switch)
+    else:
+        switch = Switch.objects.get(id=id)
+        switchform = SwitchForm(request.POST, instance = switch)
+        if switchform.is_valid():
+            switchform.save()
+            return render_to_response('hardware/jump.html', RequestContext(request, {'switch_edit_success': True}))
+    return render_to_response('hardware/switch_edit.html', RequestContext(request, {'switchform': switchform}))
+
+@login_required
+def switch_delete(request, id):
+    switch = Switch.objects.get(id=id)
+    switch.delete()
+    return render_to_response('hardware/jump.html', RequestContext(request, {'switch_delete_success': True}))
+
+@login_required
+def switch_detail(request, id):
+    switches = Switch.objects.filter(id=id)
+    #switches = Switch.objects.filter(state="enable") #测试竖向表格展示
+    return render_to_response('hardware/switch_detail.html', RequestContext(request, {'switches': switches}))
+
+@login_required
+def switch_telnet(request, id):
+    url = "192.168.112.110"
+    return render_to_response('hardware/switch_telnet.html', RequestContext(request, {'url': '10.2.41.182:443'}))
+
+@login_required
+def switch_manage(request, id):
+    switch = Switch.objects.get(id = id)
+    switch_snmp = Session(hostname=switch.sys_ip, community='public', version=2)
+    cpu_info = switch_snmp.get(".1.3.6.1.4.1.4413.1.1.1.1.4.9.0")
+    cpu = cpu_info.value[(cpu_info.value.find('(')+2):(cpu_info.value.find(')')-1)]
+    cpu = float(cpu)
+    #system_info = switch_snmp.get_bulk(".1.3.6.1.4.1.4413.1.1.1.1.4.9",0,10)
+    #system_info = switch_snmp.walk(".1.3.6.1.2.1.2.2.1.2")
+    return render_to_response('hardware/switch_manage.html', RequestContext(request, {'cpu': cpu}))
+
+@login_required
+# 由于传递的变量数目可能少于所有列出的，所以必须得用可变参数传递。
+# arg = {'search':'network/manager/xxx', 'id':'xxx', 'item':'xxx'}
+def ip(request, **arg):
+    networks = Network.objects.all()
+    managers = Manager.objects.all()
+    racks = Rack.objects.all()
+    if arg == {}:
+        ips = IP.objects.all()
+    else:
+        for x in arg:
+            if x == "search":
+                search = arg[x]
+            if x == "id":
+                id = arg[x]
+        if search == "network":
+            network = Network.objects.get(id = id)
+            ips = IP.objects.filter(network = network)
+        if search == "manager":
+            manager = Manager.objects.get(id = id)
             ips = IP.objects.filter(manager = manager)
         if search == "rack":
             rack = Rack.objects.get(id = id)
             ips = IP.objects.filter(rack = rack)
-        if search == "state":
-            state = item
-            ips = IP.objects.filter(state = state)
-    else:
-        ips = IP.objects.all()
+    ips = ips.extra(select={'ipa': "inet_aton(ip)"}).extra(order_by=['ipa'])
     paginator = Paginator(ips, 10) # 实例化一个分页对象
     page = request.GET.get('page') # 获取页码
     try:
@@ -206,9 +307,9 @@ def ip(request, **arg):
     except (InvalidPage, EmptyPage): # 如果页码太大，没有相应的记录
         ips = paginator.page(paginator.num_pages) # 取最后一页的记录
     content = {
+        'networks': networks,
         'managers': managers,
         'racks': racks,
-        'state_list': state_list,
         'ips': ips,
     }
     return render_to_response('hardware/ip.html', RequestContext(request, content))
@@ -259,4 +360,21 @@ def ip_add(request):
         'ipform': ipform,
     }
     return render_to_response('hardware/ip_add.html', RequestContext(request, content))
+
+@login_required
+def ip_delete(request, id=None):
+    print request.POST
+    if id != None:
+        ip = IP.objects.get(id=id)
+        ip.delete()
+    else:
+        ip_id_list = request.POST.getlist('ip_id')
+        print "hello1"
+        print ip_id_list
+        for ip_id in ip_id_list:
+            print "hello2"
+            print ip_id
+            #ip = IP.objects.get(id=int(ip_id))
+            #ip.delete()
+    return render_to_response('hardware/jump.html', RequestContext(request, {'ip_delete_success': True}))
 
